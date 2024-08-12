@@ -1,4 +1,3 @@
-// ImageCard.jsx
 const ImageCard = ({ photo }) => {
   const { urls, alt_description } = photo;
   return (

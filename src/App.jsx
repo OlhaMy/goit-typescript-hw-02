@@ -17,18 +17,13 @@ function App() {
     if (!query) return;
 
     const fetchData = async () => {
-      setIsLoading(true);
       try {
+        setIsLoading(true);
         const res = await fetchPhotos(query, page);
-        console.log("API Response:", res); // Log the entire response to understand the structure
 
-        if (res && Array.isArray(res.results)) {
-          setPhotos((prev) => [...prev, ...res.results]);
-          setShowLoadMore(page < Math.ceil(res.total / res.results.length));
-        } else {
-          console.error("Unexpected format from API:", res);
-          toast.error("Unexpected format from API");
-        }
+        setPhotos((prev) => [...prev, ...res]);
+
+        setShowLoadMore(page < Math.ceil(res.total_results / res.per_page));
       } catch (error) {
         console.error("Error fetching photos:", error);
         toast.error("Failed to fetch photos");
@@ -37,13 +32,14 @@ function App() {
       }
     };
 
-    fetchData(); // Call the function without any arguments
+    fetchData();
   }, [query, page]);
 
   const handleSubmit = (searchTerm) => {
     setQuery(searchTerm);
     setPage(1);
     setPhotos([]);
+    setShowLoadMore(false);
   };
 
   const handleClick = () => {

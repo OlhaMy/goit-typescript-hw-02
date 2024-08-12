@@ -1,5 +1,6 @@
 import toast from "react-hot-toast";
 import { Formik, Form, Field, ErrorMessage } from "formik";
+import s from "./SearchBar.module.css";
 
 import * as Yup from "yup";
 
@@ -17,13 +18,13 @@ const SearchBar = ({ onSubmit }) => {
   };
 
   return (
-    <header>
+    <header className={s.header}>
       <Formik
         initialValues={{ search: "" }}
         validationSchema={searchFormSchema}
         onSubmit={handleSubmit}
       >
-        <Form>
+        <Form className={s.form}>
           <Field
             type="text"
             name="search"
