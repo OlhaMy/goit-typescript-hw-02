@@ -20,7 +20,7 @@ const SearchBar = ({ onSubmit }) => {
   return (
     <header className={s.header}>
       <Formik
-        initialValues={{ search: "" }}
+        initialValues={{ search: " " }}
         validationSchema={searchFormSchema}
         onSubmit={handleSubmit}
       >

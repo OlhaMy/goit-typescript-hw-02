@@ -3,7 +3,7 @@ const ImageCard = ({ photo }) => {
   const { urls, alt_description } = photo;
   return (
     <li className={s.item}>
-      <div>
+      <div className={s.imgBox}>
         <img src={urls.small} alt={alt_description} />
       </div>
     </li>
