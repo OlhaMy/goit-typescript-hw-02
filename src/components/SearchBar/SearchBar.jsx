@@ -1,33 +1,44 @@
 import toast from "react-hot-toast";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 
-const SearchBar = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
+import * as Yup from "yup";
 
-    const form = e.target;
-    const formImg = form.elements.query.value.trim();
+const searchFormSchema = Yup.object().shape({
+  search: Yup.string()
+    .min(2, "Too short")
+    .max(50, "Too long")
+    .required("The field is required"),
+});
 
-    if (formImg === "") {
-      toast.error("Please enter a search term.");
-      return;
-    }
-
-    console.log("Searching for:", formImg); // Тут можна розмістити логіку для обробки запиту
-    form.reset();
+const SearchBar = ({ onSubmit }) => {
+  const handleSubmit = (values, { resetForm }) => {
+    onSubmit(values.search);
+    resetForm();
   };
 
   return (
     <header>
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          name="query"
-          autoComplete="off"
-          autoFocus
-          placeholder="Search images and photos"
-        />
-        <button type="submit">Search</button>
-      </form>
+      <Formik
+        initialValues={{ search: "" }}
+        validationSchema={searchFormSchema}
+        onSubmit={handleSubmit}
+      >
+        <Form>
+          <Field
+            type="text"
+            name="search"
+            autoComplete="off"
+            autoFocus
+            placeholder="Search images and photos"
+          />
+          <ErrorMessage
+            name="search"
+            component="div"
+            style={{ color: "red" }}
+          />
+          <button type="submit">Search</button>
+        </Form>
+      </Formik>
     </header>
   );
 };
