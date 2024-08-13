@@ -31,7 +31,8 @@ function App() {
           return;
         }
         setPhotos((prev) => [...prev, ...res]);
-        setShowLoadMore(page < Math.ceil(res.total_results / res.per_page));
+
+        setShowLoadMore(page < Math.ceil(res.total_pages / res.per_page));
       } catch (error) {
         setIsError(true);
         toast.error("Something went wrong, try again later!");
@@ -58,8 +59,8 @@ function App() {
   };
 
   const handleOpenModal = ({ src, alt }) => {
-    setModalImg({ url: src, alt });
     setOpenModal(true);
+    setModalImg({ url: src, alt });
   };
 
   const closeModal = () => {
@@ -84,7 +85,11 @@ function App() {
         />
       )}
       {isLoading && <Loader />}
-      {showLoadMore && <button onClick={handleClick}>Load More</button>}
+      {showLoadMore && (
+        <button className onClick={handleClick}>
+          Load More
+        </button>
+      )}
       {isError && <Toaster />}
     </>
   );
