@@ -10,7 +10,6 @@ import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 import "./App.css";
 import { date } from "yup";
-import { ErrorMessage } from "formik";
 
 function App() {
   const [query, setQuery] = useState("");
@@ -31,14 +30,17 @@ function App() {
         setIsLoading(true);
         setIsError(false);
         const res = await fetchPhotos(query, page);
+        if (res.total === 0) {
+          toast.error("Nothing found, please enter a valid query!");
+          setIsEmpty(true);
+          return;
+        }
         console.log(res);
         setPhotos((prev) => [...prev, ...res.results]);
         setShowLoadMore(page < res.total_pages);
-
-        if (date.total_pages === 0) setIsError(true);
       } catch (error) {
-        setIsError(true);
         toast.error("Something went wrong, try again later!");
+        setIsError(true);
       } finally {
         setIsLoading(false);
       }
@@ -75,11 +77,10 @@ function App() {
     <>
       <SearchBar onSubmit={handleSubmit} />
 
-      {isEmpty && <Toaster />}
-
       {photos.length > 0 && (
         <ImageGallery photos={photos} handleOpenModal={handleOpenModal} />
       )}
+      {setIsEmpty && <Toaster />}
 
       <ImageModal
         modalIsOpen={openModal}
@@ -91,7 +92,8 @@ function App() {
       {showLoadMore && photos.length > 0 && (
         <LoadMoreBtn onClick={handleClick} />
       )}
-      {isError && <ErrorMessage />}
+
+      {isError && <Toaster />}
     </>
   );
 }
