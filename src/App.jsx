@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import SearchBar from "./components/SearchBar/SearchBar";
 import { fetchPhotos } from "./services/unsplashAPI";
+
+import SearchBar from "./components/SearchBar/SearchBar";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Loader from "./components/Loader/Loader";
+import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 import "./App.css";
 
@@ -24,15 +27,17 @@ function App() {
     const fetchData = async () => {
       try {
         setIsLoading(true);
+        setIsError(false);
         const res = await fetchPhotos(query, page);
+        setPhotos((prev) => [...prev, ...res]);
+        setShowLoadMore(page < Math.ceil(res.total_pages / res.per_page));
+
         if (!res.photos.length) {
           setIsEmpty(true);
           toast.error("Nothing found, please enter a valid query!");
+          setIsError(true);
           return;
         }
-        setPhotos((prev) => [...prev, ...res]);
-
-        setShowLoadMore(page < Math.ceil(res.total_pages / res.per_page));
       } catch (error) {
         setIsError(true);
         toast.error("Something went wrong, try again later!");
@@ -45,8 +50,8 @@ function App() {
 
   const handleSubmit = (searchTerm) => {
     setQuery(searchTerm);
-    setPage(1);
     setPhotos([]);
+    setPage(1);
     setShowLoadMore(false);
     setIsError(false);
     setIsEmpty(false);
@@ -58,9 +63,9 @@ function App() {
     setPage((prev) => prev + 1);
   };
 
-  const handleOpenModal = ({ src, alt }) => {
+  const handleOpenModal = (modalImg) => {
     setOpenModal(true);
-    setModalImg({ url: src, alt });
+    setModalImg(modalImg);
   };
 
   const closeModal = () => {
@@ -71,25 +76,21 @@ function App() {
   return (
     <>
       <SearchBar onSubmit={handleSubmit} />
-      {isEmpty && <Toaster />}
+
+      {isEmpty && <ErrorMessage />}
 
       {photos.length > 0 && (
         <ImageGallery photos={photos} handleOpenModal={handleOpenModal} />
       )}
-      {openModal && (
-        <ImageModal
-          modalIsOpen={openModal}
-          closeModal={closeModal}
-          url={modalImg.url}
-          alt={modalImg.alt}
-        />
-      )}
+
+      <ImageModal
+        modalIsOpen={openModal}
+        closeModal={closeModal}
+        modalImg={modalImg}
+      />
+
       {isLoading && <Loader />}
-      {showLoadMore && (
-        <button className onClick={handleClick}>
-          Load More
-        </button>
-      )}
+      {showLoadMore && <LoadMoreBtn onClick={handleClick} />}
       {isError && <Toaster />}
     </>
   );
