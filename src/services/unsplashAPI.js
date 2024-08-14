@@ -10,7 +10,7 @@ export const fetchPhotos = async (query, page) => {
         client_id: "hZIgvv_tZy8J3SWbvTilVSuoPAUqYkRrILs3JGwXhZY",
       },
     });
-    return response.data.results;
+    return response.data;
   } catch (error) {
     console.error("Error fetching photos:", error);
     throw error;

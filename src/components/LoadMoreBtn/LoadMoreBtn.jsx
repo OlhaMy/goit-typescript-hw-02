@@ -1,4 +1,8 @@
-const LoadMoreBtn = ({ handleClick }) => {
-  return <button onClick={handleClick}>Load More</button>;
+const LoadMoreBtn = ({ onClick }) => {
+  return (
+    <button className="s.loadMore" type="button" onClick={onClick}>
+      Load More
+    </button>
+  );
 };
 export default LoadMoreBtn;

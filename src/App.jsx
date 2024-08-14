@@ -3,12 +3,14 @@ import { Toaster, toast } from "react-hot-toast";
 import { fetchPhotos } from "./services/unsplashAPI";
 
 import SearchBar from "./components/SearchBar/SearchBar";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+
 import ImageGallery from "./components/ImageGallery/ImageGallery";
 import Loader from "./components/Loader/Loader";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 import "./App.css";
+import { date } from "yup";
+import { ErrorMessage } from "formik";
 
 function App() {
   const [query, setQuery] = useState("");
@@ -29,15 +31,11 @@ function App() {
         setIsLoading(true);
         setIsError(false);
         const res = await fetchPhotos(query, page);
-        setPhotos((prev) => [...prev, ...res]);
-        setShowLoadMore(page < Math.ceil(res.total_pages / res.per_page));
+        console.log(res);
+        setPhotos((prev) => [...prev, ...res.results]);
+        setShowLoadMore(page < res.total_pages);
 
-        if (!res.photos.length) {
-          setIsEmpty(true);
-          toast.error("Nothing found, please enter a valid query!");
-          setIsError(true);
-          return;
-        }
+        if (date.total_pages === 0) setIsError(true);
       } catch (error) {
         setIsError(true);
         toast.error("Something went wrong, try again later!");
@@ -77,7 +75,7 @@ function App() {
     <>
       <SearchBar onSubmit={handleSubmit} />
 
-      {isEmpty && <ErrorMessage />}
+      {isEmpty && <Toaster />}
 
       {photos.length > 0 && (
         <ImageGallery photos={photos} handleOpenModal={handleOpenModal} />
@@ -90,8 +88,10 @@ function App() {
       />
 
       {isLoading && <Loader />}
-      {showLoadMore && <LoadMoreBtn onClick={handleClick} />}
-      {isError && <Toaster />}
+      {showLoadMore && photos.length > 0 && (
+        <LoadMoreBtn onClick={handleClick} />
+      )}
+      {isError && <ErrorMessage />}
     </>
   );
 }

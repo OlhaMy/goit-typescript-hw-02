@@ -1,11 +1,13 @@
-import React from "react";
-import { Toaster } from "react-hot-toast";
+import { ErrorMessage } from "formik";
+import toast, { Toaster, toast } from "react-hot-toast";
 
-const ErrorMessage = () => {
-  return (
-    <div>
-      <Toaster position="top-center" reverseOrder={true} />
-    </div>
-  );
-};
+const notify = () => toast("Here is your toast.");
+
+return (
+  <div>
+    <button onClick={notify}>Make me a toast</button>
+    <Toaster />
+  </div>
+);
+
 export default ErrorMessage;

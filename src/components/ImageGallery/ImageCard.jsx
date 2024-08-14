@@ -8,9 +8,7 @@ const ImageCard = ({ alt_description, urls, handleOpenModal }) => {
         handleOpenModal({ src: urls.regular, alt: alt_description })
       }
     >
-      <div className={s.imgBox}>
-        <img src={urls.small} alt={alt_description} />
-      </div>
+      <img src={urls.small} alt={alt_description} />
     </li>
   );
 };
