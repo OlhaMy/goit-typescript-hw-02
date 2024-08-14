@@ -80,7 +80,7 @@ function App() {
       {photos.length > 0 && (
         <ImageGallery photos={photos} handleOpenModal={handleOpenModal} />
       )}
-      {setIsEmpty && <Toaster />}
+      {setIsEmpty && <Toaster position="top-right" reverseOrder={false} />}
 
       <ImageModal
         modalIsOpen={openModal}
@@ -93,7 +93,7 @@ function App() {
         <LoadMoreBtn onClick={handleClick} />
       )}
 
-      {isError && <Toaster />}
+      {isError && <Toaster position="top-right" reverseOrder={false} />}
     </>
   );
 }
