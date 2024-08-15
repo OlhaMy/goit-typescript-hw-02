@@ -83,7 +83,7 @@ function App() {
     <>
       <SearchBar onSubmit={handleSubmit} />
 
-      {isEmpty && <p>Nothing found, please enter a valid query!</p>}
+      {isEmpty && <Toaster position="top-right" reverseOrder={false} />}
 
       {photos.length > 0 && (
         <ImageGallery photos={photos} handleOpenModal={handleOpenModal} />
@@ -100,9 +100,7 @@ function App() {
         <LoadMoreBtn onClick={handleClick} />
       )}
 
-      {isError && <p>Something went wrong, try again later!</p>}
-
-      <Toaster position="top-right" reverseOrder={false} />
+      {isError && <Toaster position="top-right" reverseOrder={false} />}
     </>
   );
 }
