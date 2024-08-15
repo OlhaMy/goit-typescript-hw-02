@@ -30,14 +30,15 @@ function App() {
         setIsLoading(true);
         setIsError(false);
         const res = await fetchPhotos(query, page);
+
         if (res.total === 0) {
           toast.error("Nothing found, please enter a valid query!");
           setIsEmpty(true);
           return;
         }
-        console.log(res);
         setPhotos((prev) => [...prev, ...res.results]);
         setShowLoadMore(page < res.total_pages);
+        setIsEmpty(false);
       } catch (error) {
         toast.error("Something went wrong, try again later!");
         setIsError(true);
@@ -49,6 +50,11 @@ function App() {
   }, [query, page]);
 
   const handleSubmit = (searchTerm) => {
+    if (!searchTerm.trim()) {
+      toast.error("Please enter a search term");
+      return;
+    }
+
     setQuery(searchTerm);
     setPhotos([]);
     setPage(1);
@@ -77,10 +83,11 @@ function App() {
     <>
       <SearchBar onSubmit={handleSubmit} />
 
+      {isEmpty && <p>Nothing found, please enter a valid query!</p>}
+
       {photos.length > 0 && (
         <ImageGallery photos={photos} handleOpenModal={handleOpenModal} />
       )}
-      {setIsEmpty && <Toaster position="top-right" reverseOrder={false} />}
 
       <ImageModal
         modalIsOpen={openModal}
@@ -93,7 +100,9 @@ function App() {
         <LoadMoreBtn onClick={handleClick} />
       )}
 
-      {isError && <Toaster position="top-right" reverseOrder={false} />}
+      {isError && <p>Something went wrong, try again later!</p>}
+
+      <Toaster position="top-right" reverseOrder={false} />
     </>
   );
 }
