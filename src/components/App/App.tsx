@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import { Toaster, toast } from "react-hot-toast";
-import { fetchPhotos } from "./services/unsplashAPI";
+import { fetchPhotos } from "../../services/unsplashAPI";
 
-import SearchBar from "./components/SearchBar/SearchBar";
+import SearchBar from "../SearchBar/SearchBar";
 
-import ImageGallery from "./components/ImageGallery/ImageGallery";
-import Loader from "./components/Loader/Loader";
-import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
-import ImageModal from "./components/ImageModal/ImageModal";
+import ImageGallery from "../ImageGallery/ImageGallery";
+import Loader from "../Loader/Loader";
+import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
+import ImageModal from "../ImageModal/ImageModal";
 import "./App.css";
-import { date } from "yup";
 
 function App() {
   const [query, setQuery] = useState("");
