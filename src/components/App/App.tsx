@@ -10,16 +10,26 @@ import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "../ImageModal/ImageModal";
 import "./App.css";
 
+interface Photo {
+  src: string;
+  alt: string;
+}
+interface ModalImage {
+  src: string;
+  alt: string;
+}
+
 function App() {
-  const [query, setQuery] = useState("");
-  const [photos, setPhotos] = useState([]);
-  const [page, setPage] = useState(1);
-  const [isLoading, setIsLoading] = useState(false);
-  const [showLoadMore, setShowLoadMore] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [openModal, setOpenModal] = useState(false);
-  const [modalImg, setModalImg] = useState({});
+  const [query, setQuery] = useState<string>("");
+  const [photos, setPhotos] = useState<Photo[]>([]);
+
+  const [page, setPage] = useState<number>(1);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showLoadMore, setShowLoadMore] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const [openModal, setOpenModal] = useState<boolean>(false);
+  const [modalImg, setModalImg] = useState<ModalImage>({});
 
   useEffect(() => {
     if (!query) return;
