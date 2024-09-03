@@ -1,6 +1,11 @@
+import { ImageCardProps } from "../App/App.types";
 import s from "./ImageGallery.module.css";
 
-const ImageCard = ({ alt_description, urls, handleOpenModal }) => {
+const ImageCard: React.FC<ImageCardProps> = ({
+  alt_description,
+  urls,
+  handleOpenModal,
+}) => {
   return (
     <li
       className={s.item}

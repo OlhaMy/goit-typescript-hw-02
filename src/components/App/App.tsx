@@ -8,16 +8,8 @@ import ImageGallery from "../ImageGallery/ImageGallery";
 import Loader from "../Loader/Loader";
 import LoadMoreBtn from "../LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "../ImageModal/ImageModal";
+import { Photo, ModalImage, FetchPhotosResult } from "./App.types";
 import "./App.css";
-
-interface Photo {
-  src: string;
-  alt: string;
-}
-interface ModalImage {
-  src: string;
-  alt: string;
-}
 
 function App() {
   const [query, setQuery] = useState<string>("");
@@ -29,8 +21,7 @@ function App() {
   const [isError, setIsError] = useState<boolean>(false);
   const [isEmpty, setIsEmpty] = useState<boolean>(false);
   const [openModal, setOpenModal] = useState<boolean>(false);
-  const [modalImg, setModalImg] = useState<ModalImage>({});
-
+  const [modalImg, setModalImg] = useState<ModalImage>({ src: "", alt: "" });
   useEffect(() => {
     if (!query) return;
 
@@ -38,7 +29,7 @@ function App() {
       try {
         setIsLoading(true);
         setIsError(false);
-        const res = await fetchPhotos(query, page);
+        const res = await fetchPhotos<FetchPhotosResult>(query, page);
 
         if (res.total === 0) {
           toast.error("Nothing found, please enter a valid query!");
@@ -58,7 +49,7 @@ function App() {
     fetchData();
   }, [query, page]);
 
-  const handleSubmit = (searchTerm) => {
+  const handleSubmit = (searchTerm: string) => {
     if (!searchTerm.trim()) {
       toast.error("Please enter a search term");
       return;
@@ -71,21 +62,21 @@ function App() {
     setIsError(false);
     setIsEmpty(false);
     setOpenModal(false);
-    setModalImg({});
+    setModalImg({ src: "", alt: "" });
   };
 
   const handleClick = () => {
     setPage((prev) => prev + 1);
   };
 
-  const handleOpenModal = (modalImg) => {
+  const handleOpenModal = (modalImg: ModalImage) => {
     setOpenModal(true);
     setModalImg(modalImg);
   };
 
   const closeModal = () => {
     setOpenModal(false);
-    setModalImg({});
+    setModalImg({ src: "", alt: "" });
   };
 
   return (

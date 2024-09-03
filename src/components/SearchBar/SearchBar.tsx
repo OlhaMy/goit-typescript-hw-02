@@ -1,4 +1,5 @@
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage, FormikHelpers } from "formik";
+import { SearchBarProps, FormValues } from "../App/App.types";
 import s from "./SearchBar.module.css";
 
 import * as Yup from "yup";
@@ -10,8 +11,11 @@ const searchFormSchema = Yup.object().shape({
     .required("The field is required"),
 });
 
-const SearchBar = ({ onSubmit }) => {
-  const handleSubmit = (values, { resetForm }) => {
+const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
+  const handleSubmit = (
+    values: FormValues,
+    { resetForm }: FormikHelpers<FormValues>
+  ) => {
     onSubmit(values.search);
     resetForm();
   };
@@ -31,11 +35,7 @@ const SearchBar = ({ onSubmit }) => {
             autoFocus
             placeholder="Search images and photos"
           />
-          <ErrorMessage
-            name="search"
-            component="div"
-            style={{ color: "red" }}
-          />
+          <ErrorMessage name="search" component="div" className={s.error} />
           <button type="submit">Search</button>
         </Form>
       </Formik>
